@@ -4,7 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weekly Experience Form - Intern BA</title>
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <style>
         input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
@@ -26,6 +32,11 @@
             display: inline-block;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Custom Font SweetAlert agar sesuai Tailwind */
+        .swal2-popup {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen py-8 px-4">
@@ -157,9 +168,7 @@
 
     <script>
         // ---------------------------------------------------------
-        // KONFIGURASI AMAN
-        // URL ini mengarah ke server Vercel Anda sendiri, bukan ke Google.
-        // Orang lain tidak bisa melihat URL Google Script asli Anda.
+        // KONFIGURASI AMAN (VERCEL PROXY)
         // ---------------------------------------------------------
         const SCRIPT_URL = '/api/proxy'; 
 
@@ -169,7 +178,6 @@
             console.log('Loading intern names via Proxy...');
             
             try {
-                // Menggunakan fetch biasa (GET) ke endpoint proxy
                 const response = await fetch(`${SCRIPT_URL}?action=getInterns`);
                 
                 if (!response.ok) throw new Error('Network response was not ok');
@@ -187,28 +195,24 @@
                         select.appendChild(option);
                     });
                 } else {
-                    // Fallback jika data kosong atau format salah
                     console.warn('Using fallback names');
-                    select.innerHTML = '<option value="">Pilih nama...</option><option value="Intern 1">Intern 1</option><option value="Intern 2">Intern 2</option>';
+                    select.innerHTML = '<option value="">Pilih nama...</option><option value="Qorina">Qorina</option><option value="Azizah">Azizah</option>';
                 }
             } catch (error) {
                 console.error('❌ Failed to load interns:', error);
-                // Fallback jika fetch gagal
-                select.innerHTML = '<option value="">Pilih nama...</option><option value="Intern 1">Intern 1</option><option value="Intern 2">Intern 2</option>';
+                select.innerHTML = '<option value="">Pilih nama...</option><option value="Qorina">Qorina</option><option value="Azizah">Azizah</option>';
             }
         }
 
-        // Jalankan saat halaman dimuat
         loadInternNames();
 
-        // Logic untuk tombol rating (Warna-warni)
+        // Logic untuk tombol rating
         document.querySelectorAll('.rating-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 const parent = this.parentElement;
                 const value = this.getAttribute('data-value');
                 const hiddenInput = parent.nextElementSibling.nextElementSibling;
                 
-                // Reset semua tombol di grup ini
                 parent.querySelectorAll('.rating-btn').forEach(b => {
                     const val = b.getAttribute('data-value');
                     if (val <= 3) {
@@ -218,7 +222,6 @@
                     }
                 });
                 
-                // Highlight tombol yang dipilih
                 if (value <= 3) {
                     this.className = 'rating-btn flex-1 py-2 px-4 rounded-lg font-semibold transition bg-red-500 text-white';
                 } else {
@@ -229,9 +232,8 @@
             });
         });
 
-        // Logic Submit Form
+        // Logic Submit Form dengan SweetAlert
         document.getElementById('submitBtn').addEventListener('click', async function() {
-            // Ambil value dari form
             const nama = document.getElementById('nama').value;
             const mingguKe = document.getElementById('mingguKe').value;
             const tanggal = document.getElementById('tanggal').value;
@@ -241,13 +243,18 @@
             const yangKurang = document.getElementById('yangKurang').value;
             const saranPerbaikan = document.getElementById('saranPerbaikan').value;
 
-            // Validasi sederhana
+            // Validasi dengan SweetAlert
             if (!nama || !mingguKe || !tanggal || !kegiatanUtama || !yangKurang || !saranPerbaikan) {
-                alert('Mohon lengkapi semua field yang wajib diisi (*)');
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Data Belum Lengkap',
+                    text: 'Mohon lengkapi semua field yang bertanda bintang (*)',
+                    confirmButtonColor: '#3b82f6',
+                    confirmButtonText: 'Oke, saya lengkapi'
+                });
                 return;
             }
 
-            // UI Loading State
             const submitBtn = document.getElementById('submitBtn');
             const submitText = document.getElementById('submitText');
             const btnIcon = document.getElementById('btnIcon');
@@ -258,8 +265,6 @@
             btnIcon.innerHTML = '<div class="spinner"></div>';
 
             try {
-                // Siapkan data untuk dikirim
-                // Menggunakan URLSearchParams agar kompatibel dengan Proxy & Google Script
                 const params = new URLSearchParams();
                 params.append('action', 'submit');
                 params.append('nama', nama);
@@ -272,7 +277,6 @@
                 params.append('saranPerbaikan', saranPerbaikan);
                 params.append('timestamp', new Date().toLocaleString('id-ID'));
 
-                // Kirim ke Proxy Vercel (POST)
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
                     headers: {
@@ -284,7 +288,15 @@
                 const result = await response.json();
 
                 if (result.status === 'success' || result.result === 'success') {
-                    alert('✅ Form berhasil disubmit ke Google Sheets!');
+                    // Sukses SweetAlert
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: 'Laporan mingguan Anda telah tersimpan.',
+                        confirmButtonColor: '#3b82f6',
+                        timer: 3000,
+                        timerProgressBar: true
+                    });
                     resetForm();
                 } else {
                     throw new Error(result.message || 'Terjadi kesalahan saat submit');
@@ -292,13 +304,14 @@
 
             } catch (error) {
                 console.error('Error:', error);
-                // Kadang Google Script return error CORS tapi data masuk, 
-                // tapi karena kita pakai Proxy, error yang sampai sini biasanya error beneran.
-                // Namun untuk jaga-jaga UX:
-                alert('⚠️ Terjadi kendala koneksi, namun mencoba menyimpan data. Silakan cek sheet jika memungkinkan.');
-                resetForm();
+                // Error SweetAlert
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Terjadi kendala koneksi. Silakan coba lagi atau cek sheet manual.',
+                    confirmButtonColor: '#ef4444'
+                });
             } finally {
-                // Kembalikan tombol ke semula
                 submitBtn.disabled = false;
                 submitText.textContent = 'Submit';
                 btnIcon.innerHTML = originalIcon;
@@ -314,7 +327,6 @@
             document.getElementById('yangKurang').value = '';
             document.getElementById('saranPerbaikan').value = '';
             
-            // Reset tombol rating ke default (7)
             document.querySelectorAll('.rating-btn').forEach(btn => {
                 const val = btn.getAttribute('data-value');
                 if (val <= 3) {
@@ -329,13 +341,30 @@
             document.getElementById('valueMentor').value = 7;
         }
 
+        // Reset Button dengan SweetAlert Confirm
         document.getElementById('resetBtn').addEventListener('click', function() {
-            if (confirm('Apakah Anda yakin ingin mereset form?')) {
-                resetForm();
-            }
+            Swal.fire({
+                title: 'Reset Form?',
+                text: "Semua data yang sudah diisi akan hilang!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3b82f6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Reset',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    resetForm();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Form Direset',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                }
+            });
         });
 
-        // Set tanggal hari ini saat load
         document.getElementById('tanggal').valueAsDate = new Date();
     </script>
 </body>
