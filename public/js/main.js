@@ -68,7 +68,7 @@ document.getElementById('submitBtn').addEventListener('click', async () => {
             Swal.fire({
                 icon: 'success',
                 title: 'Berhasil!',
-                text: 'Feedback disubmit, thanks!',
+                text: 'Feedback tersubmit, thanks!',
                 confirmButtonColor: '#3b82f6',
                 timer: 3000,
                 timerProgressBar: true
