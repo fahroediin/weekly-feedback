@@ -8,7 +8,7 @@ export function setupRatingButtons() {
             btn.addEventListener('click', function() {
                 const value = this.getAttribute('data-value');
                 
-                // Reset styles
+                // Reset styles semua tombol di grup ini
                 buttons.forEach(b => {
                     const val = b.getAttribute('data-value');
                     if (val <= 3) {
@@ -18,7 +18,7 @@ export function setupRatingButtons() {
                     }
                 });
 
-                // Highlight selected
+                // Highlight tombol yang dipilih
                 if (value <= 3) {
                     this.className = 'rating-btn flex-1 py-2 px-4 rounded-lg font-semibold transition bg-red-500 text-white';
                 } else {
@@ -56,7 +56,7 @@ export function toggleLoading(isLoading) {
     if (isLoading) {
         submitBtn.disabled = true;
         submitText.textContent = 'Mengirim...';
-        submitBtn.dataset.originalIcon = btnIcon.innerHTML; // Simpan icon lama
+        submitBtn.dataset.originalIcon = btnIcon.innerHTML;
         btnIcon.innerHTML = '<div class="spinner"></div>';
     } else {
         submitBtn.disabled = false;
@@ -67,7 +67,6 @@ export function toggleLoading(isLoading) {
     }
 }
 
-// TAMBAHAN: Fungsi kontrol Global Loader
 export function toggleGlobalLoader(show) {
     const loader = document.getElementById('globalLoader');
     if (!loader) return;
@@ -75,12 +74,8 @@ export function toggleGlobalLoader(show) {
     if (show) {
         loader.classList.remove('opacity-0', 'pointer-events-none');
     } else {
-        // Tambahkan class opacity-0 untuk fade out
         loader.classList.add('opacity-0');
-        // Tambahkan pointer-events-none agar bisa diklik tembus meski transparan
         loader.classList.add('pointer-events-none');
-        
-        // Opsional: Hapus dari DOM setelah transisi selesai (0.5s) agar bersih
         setTimeout(() => {
             loader.style.display = 'none';
         }, 500);
@@ -91,19 +86,17 @@ export function resetFormUI() {
     document.getElementById('weeklyForm').reset();
     document.getElementById('tanggal').valueAsDate = new Date();
     
-    // Reset Rating Buttons Visuals
+    // Reset Rating Buttons Visuals (Kembali ke warna pudar)
     document.querySelectorAll('.rating-btn').forEach(btn => {
         const val = btn.getAttribute('data-value');
         if (val <= 3) {
             btn.className = 'rating-btn flex-1 py-2 px-4 rounded-lg font-semibold transition bg-red-100 text-red-700 hover:bg-red-200';
-        } else if (val == 7) {
-            btn.className = 'rating-btn flex-1 py-2 px-4 rounded-lg font-semibold transition bg-green-500 text-white';
         } else {
             btn.className = 'rating-btn flex-1 py-2 px-4 rounded-lg font-semibold transition bg-green-100 text-green-700 hover:bg-green-200';
         }
     });
 
-    // Reset Hidden Inputs
-    document.getElementById('valuePembelajaran').value = 7;
-    document.getElementById('valueMentor').value = 7;
+    // Reset Hidden Inputs menjadi kosong
+    document.getElementById('valuePembelajaran').value = "";
+    document.getElementById('valueMentor').value = "";
 }

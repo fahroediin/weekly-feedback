@@ -1,5 +1,5 @@
 export function validateForm(data) {
-    // 1. Validasi Kelengkapan (Required)
+    // 1. Validasi Kelengkapan Text (Required)
     const requiredFields = ['nama', 'mingguKe', 'tanggal', 'kegiatanUtama', 'yangKurang', 'saranPerbaikan'];
     for (const field of requiredFields) {
         if (!data[field]) {
@@ -12,7 +12,26 @@ export function validateForm(data) {
         }
     }
 
-    // 2. Validasi Minggu Ke- (Min 1)
+    // 2. Validasi Rating (Wajib Diisi)
+    if (!data.ratingPembelajaran) {
+        return {
+            isValid: false,
+            title: 'Rating Kosong',
+            message: 'Mohon berikan nilai untuk Proses Pembelajaran.',
+            target: null
+        };
+    }
+
+    if (!data.ratingMentor) {
+        return {
+            isValid: false,
+            title: 'Rating Kosong',
+            message: 'Mohon berikan nilai untuk Komunikasi & Bimbingan Mentor.',
+            target: null
+        };
+    }
+
+    // 3. Validasi Minggu Ke- (Min 1)
     if (parseInt(data.mingguKe) < 1) {
         return {
             isValid: false,
@@ -22,7 +41,7 @@ export function validateForm(data) {
         };
     }
 
-    // 3. Validasi Panjang Karakter
+    // 4. Validasi Panjang Karakter
     if (data.kegiatanUtama.trim().length < 30) {
         return {
             isValid: false,

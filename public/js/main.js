@@ -4,28 +4,27 @@ import { setupRatingButtons, populateInternSelect, toggleLoading, resetFormUI, t
 
 // --- Initialization ---
 document.addEventListener('DOMContentLoaded', async () => {
-    // 1. Setup UI Dasar
+    // 1. Setup UI
     document.getElementById('tanggal').valueAsDate = new Date();
     setupRatingButtons();
 
     // 2. Load Data dengan Global Loader
     try {
-        // Loader sudah muncul dari HTML (default), tapi kita pastikan logic fetch jalan
         const data = await fetchInterns();
-        
         if (data && data.status === 'success') {
             populateInternSelect(data.interns);
         } else {
-            populateInternSelect(null); // Fallback
+            populateInternSelect(null); // Trigger fallback
         }
     } catch (error) {
         console.error("Init Error:", error);
-        populateInternSelect(null); // Fallback jika error fatal
+        populateInternSelect(null);
     } finally {
-        // 3. Matikan Loader (Sukses atau Gagal, loader harus hilang)
+        // 3. Matikan Loader
         toggleGlobalLoader(false);
     }
 });
+
 // --- Event Listeners ---
 
 // Submit Handler
@@ -68,7 +67,7 @@ document.getElementById('submitBtn').addEventListener('click', async () => {
             Swal.fire({
                 icon: 'success',
                 title: 'Berhasil!',
-                text: 'Feedback tersubmit, thanks!',
+                text: 'Laporan mingguan Anda telah tersimpan.',
                 confirmButtonColor: '#3b82f6',
                 timer: 3000,
                 timerProgressBar: true
