@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly Experience Form - Intern BA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #3b82f6;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+        /* Loading spinner sederhana */
+        .spinner {
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #3b82f6;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen py-8 px-4">
+    <div class="max-w-3xl mx-auto">
+        <div class="bg-white rounded-xl shadow-lg p-6">
+            <div class="border-b pb-4 mb-6">
+                <div class="flex items-center gap-3 mb-1">
+                    <svg class="w-7 h-7 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    <h1 class="text-2xl font-bold text-gray-800">Weekly Experience Form</h1>
+                </div>
+                <p class="text-sm text-gray-500">Intern BA Weekly Feedback - Diisi setiap jumat</p>
+            </div>
+
+            <div class="space-y-6">
+                <!-- Info Dasar -->
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            Nama <span class="text-red-500">*</span>
+                        </label>
+                        <select id="nama" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option value="">Loading...</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            Minggu Ke- <span class="text-red-500">*</span>
+                        </label>
+                        <input type="number" id="mingguKe" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            Tanggal <span class="text-red-500">*</span>
+                        </label>
+                        <input type="date" id="tanggal" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                </div>
+
+                <!-- Kegiatan -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        Kegiatan & Pembelajaran Minggu Ini <span class="text-red-500">*</span>
+                    </label>
+                    <textarea id="kegiatanUtama" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Ringkasan singkat kegiatan dan materi yang dipelajari..."></textarea>
+                </div>
+
+                <!-- Rating -->
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Proses Pembelajaran <span class="text-red-500">*</span>
+                        </label>
+                        <div class="flex gap-2 mb-2" id="ratingPembelajaran">
+                            <button type="button" data-value="1" class="rating-btn flex-1 py-2 px-4 rounded-lg font-semibold transition bg-red-100 text-red-700 hover:bg-red-200">1</button>
+                            <button type="button" data-value="2" class="rating-btn flex-1 py-2 px-4 rounded-lg font-semibold transition bg-red-100 text-red-700 hover:bg-red-200">2</button>
+                            <button type="button" data-value="3" class="rating-btn flex-1 py-2 px-4 rounded-lg font-semibold transition bg-red-100 text-red-700 hover:bg-red-200">3</button>
+                            <button type="button" data-value="7" class="rating-btn flex-1 py-2 px-4 rounded-lg font-semibold transition bg-green-500 text-white">7</button>
+                            <button type="button" data-value="8" class="rating-btn flex-1 py-2 px-4 rounded-lg font-semibold transition bg-green-100 text-green-700 hover:bg-green-200">8</button>
+                            <button type="button" data-value="9" class="rating-btn flex-1 py-2 px-4 rounded-lg font-semibold transition bg-green-100 text-green-700 hover:bg-green-200">9</button>
+                        </div>
+                        <div class="flex justify-between text-xs text-gray-500">
+                            <span>1-3: Kurang</span>
+                            <span>7-9: Baik</span>
+                        </div>
+                        <input type="hidden" id="valuePembelajaran" value="7">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Komunikasi & Bimbingan Mentor <span class="text-red-500">*</span>
+                        </label>
+                        <div class="flex gap-2 mb-2" id="ratingMentor">
+                            <button type="button" data-value="1" class="rating-btn flex-1 py-2 px-4 rounded-lg font-semibold transition bg-red-100 text-red-700 hover:bg-red-200">1</button>
+                            <button type="button" data-value="2" class="rating-btn flex-1 py-2 px-4 rounded-lg font-semibold transition bg-red-100 text-red-700 hover:bg-red-200">2</button>
+                            <button type="button" data-value="3" class="rating-btn flex-1 py-2 px-4 rounded-lg font-semibold transition bg-red-100 text-red-700 hover:bg-red-200">3</button>
+                            <button type="button" data-value="7" class="rating-btn flex-1 py-2 px-4 rounded-lg font-semibold transition bg-green-500 text-white">7</button>
+                            <button type="button" data-value="8" class="rating-btn flex-1 py-2 px-4 rounded-lg font-semibold transition bg-green-100 text-green-700 hover:bg-green-200">8</button>
+                            <button type="button" data-value="9" class="rating-btn flex-1 py-2 px-4 rounded-lg font-semibold transition bg-green-100 text-green-700 hover:bg-green-200">9</button>
+                        </div>
+                        <div class="flex justify-between text-xs text-gray-500">
+                            <span>1-3: Kurang</span>
+                            <span>7-9: Baik</span>
+                        </div>
+                        <input type="hidden" id="valueMentor" value="7">
+                    </div>
+                </div>
+
+                <!-- Feedback -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        Apa yang Masih Kurang? <span class="text-red-500">*</span>
+                    </label>
+                    <textarea id="yangKurang" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Materi, tools, waktu, komunikasi, atau hal lainnya..."></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        Saran Perbaikan <span class="text-red-500">*</span>
+                    </label>
+                    <textarea id="saranPerbaikan" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Bagaimana hal tersebut bisa diperbaiki?"></textarea>
+                </div>
+
+                <!-- Buttons -->
+                <div class="flex gap-3 pt-4 border-t">
+                    <button id="submitBtn" class="flex-1 bg-blue-600 text-white py-2.5 px-4 rounded-lg font-semibold hover:bg-blue-700 transition flex items-center justify-center gap-2">
+                        <span id="btnIcon">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                            </svg>
+                        </span>
+                        <span id="submitText">Submit</span>
+                    </button>
+                    <button id="resetBtn" class="bg-gray-200 text-gray-700 py-2.5 px-4 rounded-lg font-semibold hover:bg-gray-300 transition flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                        </svg>
+                        Reset
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4 text-center text-xs text-gray-500 bg-white rounded-lg p-3 shadow-sm">
+            "Good analysts ask questions — great analysts ask the right questions."
+        </div>
+    </div>
+
+    <script>
+        // ---------------------------------------------------------
+        // KONFIGURASI AMAN
+        // URL ini mengarah ke server Vercel Anda sendiri, bukan ke Google.
+        // Orang lain tidak bisa melihat URL Google Script asli Anda.
+        // ---------------------------------------------------------
+        const SCRIPT_URL = '/api/proxy'; 
+
+        // Fungsi untuk mengambil daftar nama Intern
+        async function loadInternNames() {
+            const select = document.getElementById('nama');
+            console.log('Loading intern names via Proxy...');
+            
+            try {
+                // Menggunakan fetch biasa (GET) ke endpoint proxy
+                const response = await fetch(`${SCRIPT_URL}?action=getInterns`);
+                
+                if (!response.ok) throw new Error('Network response was not ok');
+                
+                const data = await response.json();
+                console.log('Data received:', data);
+                
+                select.innerHTML = '<option value="">Pilih nama...</option>';
+                
+                if (data.status === 'success' && data.interns && data.interns.length > 0) {
+                    data.interns.forEach(name => {
+                        const option = document.createElement('option');
+                        option.value = name;
+                        option.textContent = name;
+                        select.appendChild(option);
+                    });
+                } else {
+                    // Fallback jika data kosong atau format salah
+                    console.warn('Using fallback names');
+                    select.innerHTML = '<option value="">Pilih nama...</option><option value="Intern 1">Intern 1</option><option value="Intern 2">Intern 2</option>';
+                }
+            } catch (error) {
+                console.error('❌ Failed to load interns:', error);
+                // Fallback jika fetch gagal
+                select.innerHTML = '<option value="">Pilih nama...</option><option value="Intern 1">Intern 1</option><option value="Intern 2">Intern 2</option>';
+            }
+        }
+
+        // Jalankan saat halaman dimuat
+        loadInternNames();
+
+        // Logic untuk tombol rating (Warna-warni)
+        document.querySelectorAll('.rating-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const parent = this.parentElement;
+                const value = this.getAttribute('data-value');
+                const hiddenInput = parent.nextElementSibling.nextElementSibling;
+                
+                // Reset semua tombol di grup ini
+                parent.querySelectorAll('.rating-btn').forEach(b => {
+                    const val = b.getAttribute('data-value');
+                    if (val <= 3) {
+                        b.className = 'rating-btn flex-1 py-2 px-4 rounded-lg font-semibold transition bg-red-100 text-red-700 hover:bg-red-200';
+                    } else {
+                        b.className = 'rating-btn flex-1 py-2 px-4 rounded-lg font-semibold transition bg-green-100 text-green-700 hover:bg-green-200';
+                    }
+                });
+                
+                // Highlight tombol yang dipilih
+                if (value <= 3) {
+                    this.className = 'rating-btn flex-1 py-2 px-4 rounded-lg font-semibold transition bg-red-500 text-white';
+                } else {
+                    this.className = 'rating-btn flex-1 py-2 px-4 rounded-lg font-semibold transition bg-green-500 text-white';
+                }
+                
+                hiddenInput.value = value;
+            });
+        });
+
+        // Logic Submit Form
+        document.getElementById('submitBtn').addEventListener('click', async function() {
+            // Ambil value dari form
+            const nama = document.getElementById('nama').value;
+            const mingguKe = document.getElementById('mingguKe').value;
+            const tanggal = document.getElementById('tanggal').value;
+            const kegiatanUtama = document.getElementById('kegiatanUtama').value;
+            const ratingPembelajaran = document.getElementById('valuePembelajaran').value;
+            const ratingMentor = document.getElementById('valueMentor').value;
+            const yangKurang = document.getElementById('yangKurang').value;
+            const saranPerbaikan = document.getElementById('saranPerbaikan').value;
+
+            // Validasi sederhana
+            if (!nama || !mingguKe || !tanggal || !kegiatanUtama || !yangKurang || !saranPerbaikan) {
+                alert('Mohon lengkapi semua field yang wajib diisi (*)');
+                return;
+            }
+
+            // UI Loading State
+            const submitBtn = document.getElementById('submitBtn');
+            const submitText = document.getElementById('submitText');
+            const btnIcon = document.getElementById('btnIcon');
+            
+            const originalIcon = btnIcon.innerHTML;
+            submitBtn.disabled = true;
+            submitText.textContent = 'Mengirim...';
+            btnIcon.innerHTML = '<div class="spinner"></div>';
+
+            try {
+                // Siapkan data untuk dikirim
+                // Menggunakan URLSearchParams agar kompatibel dengan Proxy & Google Script
+                const params = new URLSearchParams();
+                params.append('action', 'submit');
+                params.append('nama', nama);
+                params.append('mingguKe', mingguKe);
+                params.append('tanggal', tanggal);
+                params.append('kegiatanUtama', kegiatanUtama);
+                params.append('ratingPembelajaran', ratingPembelajaran);
+                params.append('ratingMentor', ratingMentor);
+                params.append('yangKurang', yangKurang);
+                params.append('saranPerbaikan', saranPerbaikan);
+                params.append('timestamp', new Date().toLocaleString('id-ID'));
+
+                // Kirim ke Proxy Vercel (POST)
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: params
+                });
+
+                const result = await response.json();
+
+                if (result.status === 'success' || result.result === 'success') {
+                    alert('✅ Form berhasil disubmit ke Google Sheets!');
+                    resetForm();
+                } else {
+                    throw new Error(result.message || 'Terjadi kesalahan saat submit');
+                }
+
+            } catch (error) {
+                console.error('Error:', error);
+                // Kadang Google Script return error CORS tapi data masuk, 
+                // tapi karena kita pakai Proxy, error yang sampai sini biasanya error beneran.
+                // Namun untuk jaga-jaga UX:
+                alert('⚠️ Terjadi kendala koneksi, namun mencoba menyimpan data. Silakan cek sheet jika memungkinkan.');
+                resetForm();
+            } finally {
+                // Kembalikan tombol ke semula
+                submitBtn.disabled = false;
+                submitText.textContent = 'Submit';
+                btnIcon.innerHTML = originalIcon;
+            }
+        });
+
+        // Fungsi Reset Form
+        function resetForm() {
+            document.getElementById('nama').value = '';
+            document.getElementById('mingguKe').value = '';
+            document.getElementById('tanggal').valueAsDate = new Date();
+            document.getElementById('kegiatanUtama').value = '';
+            document.getElementById('yangKurang').value = '';
+            document.getElementById('saranPerbaikan').value = '';
+            
+            // Reset tombol rating ke default (7)
+            document.querySelectorAll('.rating-btn').forEach(btn => {
+                const val = btn.getAttribute('data-value');
+                if (val <= 3) {
+                    btn.className = 'rating-btn flex-1 py-2 px-4 rounded-lg font-semibold transition bg-red-100 text-red-700 hover:bg-red-200';
+                } else if (val == 7) {
+                    btn.className = 'rating-btn flex-1 py-2 px-4 rounded-lg font-semibold transition bg-green-500 text-white';
+                } else {
+                    btn.className = 'rating-btn flex-1 py-2 px-4 rounded-lg font-semibold transition bg-green-100 text-green-700 hover:bg-green-200';
+                }
+            });
+            document.getElementById('valuePembelajaran').value = 7;
+            document.getElementById('valueMentor').value = 7;
+        }
+
+        document.getElementById('resetBtn').addEventListener('click', function() {
+            if (confirm('Apakah Anda yakin ingin mereset form?')) {
+                resetForm();
+            }
+        });
+
+        // Set tanggal hari ini saat load
+        document.getElementById('tanggal').valueAsDate = new Date();
+    </script>
+</body>
+</html>
