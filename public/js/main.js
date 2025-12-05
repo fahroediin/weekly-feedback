@@ -4,23 +4,20 @@ import { setupRatingButtons, populateInternSelect, toggleLoading, resetFormUI, t
 
 // --- Initialization ---
 document.addEventListener('DOMContentLoaded', async () => {
-    // 1. Setup UI
     document.getElementById('tanggal').valueAsDate = new Date();
     setupRatingButtons();
 
-    // 2. Load Data dengan Global Loader
     try {
         const data = await fetchInterns();
         if (data && data.status === 'success') {
             populateInternSelect(data.interns);
         } else {
-            populateInternSelect(null); // Trigger fallback
+            populateInternSelect(null);
         }
     } catch (error) {
         console.error("Init Error:", error);
         populateInternSelect(null);
     } finally {
-        // 3. Matikan Loader
         toggleGlobalLoader(false);
     }
 });
@@ -44,17 +41,33 @@ document.getElementById('submitBtn').addEventListener('click', async () => {
 
     // Validate
     const validation = validateForm(formData);
+    
     if (!validation.isValid) {
+        // 1. Tampilkan Alert
         Swal.fire({
             icon: 'warning',
             title: validation.title,
             text: validation.message,
             confirmButtonColor: '#3b82f6',
             confirmButtonText: 'Perbaiki'
+        }).then(() => {
+            // 2. Arahkan ke Field setelah tombol "Perbaiki" diklik
+            if (validation.target) {
+                const element = document.getElementById(validation.target);
+                if (element) {
+                    // Scroll halus ke tengah layar
+                    element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    
+                    // Jika elemennya input/textarea/select, lakukan focus agar kursor aktif
+                    if (['INPUT', 'TEXTAREA', 'SELECT'].includes(element.tagName)) {
+                        // Beri sedikit delay agar scroll selesai dulu baru focus
+                        setTimeout(() => {
+                            element.focus({ preventScroll: true });
+                        }, 300);
+                    }
+                }
+            }
         });
-        if (validation.target) {
-            document.getElementById(validation.target).focus();
-        }
         return;
     }
 

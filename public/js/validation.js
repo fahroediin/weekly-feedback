@@ -1,13 +1,14 @@
 export function validateForm(data) {
     // 1. Validasi Kelengkapan Text (Required)
     const requiredFields = ['nama', 'mingguKe', 'tanggal', 'kegiatanUtama', 'yangKurang', 'saranPerbaikan'];
+    
     for (const field of requiredFields) {
         if (!data[field]) {
             return { 
                 isValid: false, 
                 title: 'Data Belum Lengkap',
                 message: 'Mohon lengkapi semua field yang bertanda bintang (*)',
-                target: null
+                target: field // PERBAIKAN: Return nama field agar bisa di-focus
             };
         }
     }
@@ -18,7 +19,7 @@ export function validateForm(data) {
             isValid: false,
             title: 'Rating Kosong',
             message: 'Mohon berikan nilai untuk Proses Pembelajaran.',
-            target: null
+            target: 'wrapPembelajaran' // PERBAIKAN: Target ke ID wrapper div
         };
     }
 
@@ -27,7 +28,7 @@ export function validateForm(data) {
             isValid: false,
             title: 'Rating Kosong',
             message: 'Mohon berikan nilai untuk Komunikasi & Bimbingan Mentor.',
-            target: null
+            target: 'wrapMentor' // PERBAIKAN: Target ke ID wrapper div
         };
     }
 
