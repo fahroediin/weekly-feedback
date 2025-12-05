@@ -67,7 +67,7 @@ document.getElementById('submitBtn').addEventListener('click', async () => {
             Swal.fire({
                 icon: 'success',
                 title: 'Berhasil!',
-                text: 'Laporan mingguan Anda telah tersimpan.',
+                text: 'Feedback tersubmit, thanks!',
                 confirmButtonColor: '#3b82f6',
                 timer: 3000,
                 timerProgressBar: true
