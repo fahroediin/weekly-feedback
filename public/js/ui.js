@@ -67,6 +67,26 @@ export function toggleLoading(isLoading) {
     }
 }
 
+// TAMBAHAN: Fungsi kontrol Global Loader
+export function toggleGlobalLoader(show) {
+    const loader = document.getElementById('globalLoader');
+    if (!loader) return;
+
+    if (show) {
+        loader.classList.remove('opacity-0', 'pointer-events-none');
+    } else {
+        // Tambahkan class opacity-0 untuk fade out
+        loader.classList.add('opacity-0');
+        // Tambahkan pointer-events-none agar bisa diklik tembus meski transparan
+        loader.classList.add('pointer-events-none');
+        
+        // Opsional: Hapus dari DOM setelah transisi selesai (0.5s) agar bersih
+        setTimeout(() => {
+            loader.style.display = 'none';
+        }, 500);
+    }
+}
+
 export function resetFormUI() {
     document.getElementById('weeklyForm').reset();
     document.getElementById('tanggal').valueAsDate = new Date();

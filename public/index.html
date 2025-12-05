@@ -13,6 +13,14 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen py-8 px-4">
+        <!-- TAMBAHAN: Full Screen Loader -->
+    <!-- Muncul default, nanti di-hide via JS -->
+    <div id="globalLoader" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white/90 backdrop-blur-sm transition-opacity duration-500">
+        <div class="spinner-large"></div>
+        <p class="mt-4 text-gray-600 font-medium animate-pulse">Menyiapkan Data...</p>
+    </div>
+
+    <div class="max-w-3xl mx-auto">
     <div class="max-w-3xl mx-auto">
         <div class="bg-white rounded-xl shadow-lg p-6">
             <div class="border-b pb-4 mb-6">

@@ -1,22 +1,31 @@
 import { fetchInterns, submitFormData } from './api.js';
 import { validateForm } from './validation.js';
-import { setupRatingButtons, populateInternSelect, toggleLoading, resetFormUI } from './ui.js';
+import { setupRatingButtons, populateInternSelect, toggleLoading, resetFormUI, toggleGlobalLoader } from './ui.js';
 
 // --- Initialization ---
 document.addEventListener('DOMContentLoaded', async () => {
-    // 1. Setup UI
+    // 1. Setup UI Dasar
     document.getElementById('tanggal').valueAsDate = new Date();
     setupRatingButtons();
 
-    // 2. Load Data
-    const data = await fetchInterns();
-    if (data && data.status === 'success') {
-        populateInternSelect(data.interns);
-    } else {
-        populateInternSelect(null); // Trigger fallback
+    // 2. Load Data dengan Global Loader
+    try {
+        // Loader sudah muncul dari HTML (default), tapi kita pastikan logic fetch jalan
+        const data = await fetchInterns();
+        
+        if (data && data.status === 'success') {
+            populateInternSelect(data.interns);
+        } else {
+            populateInternSelect(null); // Fallback
+        }
+    } catch (error) {
+        console.error("Init Error:", error);
+        populateInternSelect(null); // Fallback jika error fatal
+    } finally {
+        // 3. Matikan Loader (Sukses atau Gagal, loader harus hilang)
+        toggleGlobalLoader(false);
     }
 });
-
 // --- Event Listeners ---
 
 // Submit Handler
